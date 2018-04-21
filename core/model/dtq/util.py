@@ -24,11 +24,6 @@ class Dataset(object):
         :param margin: triplet margin parameter
         :n_part: number of part to split data
         """
-        ifsign = False
-        if 'sign-' in select_strategy:
-            ifsign = True
-            select_strategy = select_strategy.replace("sign-", "")
-            
         n_samples = self.n_samples
         np.random.shuffle(self._perm)
         embedding = self._output[self._perm[:n_samples]]
@@ -38,7 +33,7 @@ class Dataset(object):
         for i in range(n_part):
             start = n_samples_per_part * i
             end = min(n_samples_per_part * (i+1), n_samples)
-            dist = distance(embedding[start:end], pair=True, dist_type=dist_type, ifsign=ifsign)
+            dist = distance(embedding[start:end], pair=True, dist_type=dist_type)
             for idx_anchor in range(0, end - start):
                 label_anchor = np.copy(labels[idx_anchor+start, :])
                 label_anchor[label_anchor==0] = -1
@@ -57,24 +52,13 @@ class Dataset(object):
                     if idx_pos == idx_anchor:
                         continue
 
-                    if select_strategy == 'all' or select_strategy == 'prob':
+                    if select_strategy == 'all':
                         selected_neg = all_neg
                     elif select_strategy == 'margin':
                         selected_neg = all_neg[np.where(dist[idx_anchor, all_neg] - dist[idx_anchor, idx_pos] < margin)[0]]
-                    elif select_strategy == 'hardneg':
-                        idx_neg = all_neg[np.argmin(dist[idx_anchor, all_neg])]
-                        selected_neg = np.array([])
-                        if (dist[idx_anchor, idx_neg] - dist[idx_anchor, idx_pos] < margin):
-                            selected_neg = np.array([idx_neg])
-                        #selected_neg = all_neg[np.where(dist[idx_anchor, all_neg] - dist[idx_anchor, idx_pos] < margin)[0]]
 
                     if selected_neg.shape[0] > 0:
-                        if select_strategy == 'prob':
-                            prob = np.maximum(margin - dist[idx_anchor, all_neg] + dist[idx_anchor, idx_pos], 0)
-                            prob = prob / np.sum(prob)
-                            idx_neg = np.random.choice(selected_neg, p=prob)
-                        else:
-                            idx_neg = np.random.choice(selected_neg)
+                        idx_neg = np.random.choice(selected_neg)
                         triplets.append((idx_anchor + start, idx_pos + start, idx_neg + start))
         self._triplets = np.array(triplets)
         np.random.shuffle(self._triplets)

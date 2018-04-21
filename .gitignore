@@ -102,3 +102,5 @@ ENV/
 
 pretrained_model/
 tflog/
+models/
+*.swp

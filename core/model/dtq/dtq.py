@@ -11,17 +11,12 @@ from sklearn.cluster import MiniBatchKMeans
 
 from architecture.single_model import img_alexnet_layers
 from distance.tfversion import distance
-from evaluation import MAPs_CQ, MAPs
-from .util import Dataset
+from evaluation import MAPs_CQ
 
-@tf.RegisterGradient("QuantizeGrad")
-def quantize_grad(op, grad):
-    return tf.clip_by_value(tf.identity(grad), -1, 1)
 
-class TripletQuantization(object):
+class DTQ(object):
     def __init__(self, config):
         # Initialize setting
-        print("initializing")
         np.set_printoptions(precision=4)
 
         with tf.name_scope('stage'):
@@ -31,11 +26,10 @@ class TripletQuantization(object):
         self.output_dim = config.output_dim
         self.n_class = config.label_dim
 
-        self.subspace_num = config.n_subspace
-        self.subcenter_num = config.n_subcenter
+        self.subspace_num = config.subspace
+        self.subcenter_num = config.subcenter
         self.code_batch_size = config.code_batch_size
         self.cq_lambda = config.cq_lambda
-        self.q_lambda = config.q_lambda
         self.max_iter_update_Cb = config.max_iter_update_Cb
         self.max_iter_update_b = config.max_iter_update_b
 
@@ -72,7 +66,6 @@ class TripletQuantization(object):
         self.log_dir = config.log_dir
 
         # Setup session
-        print("launching session")
         config_proto = tf.ConfigProto()
         config_proto.gpu_options.allow_growth = True
         config_proto.allow_soft_placement = True
@@ -80,13 +73,10 @@ class TripletQuantization(object):
 
         # Create variables and placeholders
         self.img = tf.placeholder(tf.float32, [None, 256, 256, 3])
-        # TODO useless placeholder
-        self.img_label = tf.placeholder(tf.float32, [None, self.n_class])
         self.model_weights = config.model_weights
         self.img_last_layer, self.deep_param_img, self.train_layers, self.train_last_layer = self.load_model()
 
         with tf.name_scope('quantization'):
-            # C
             self.C = tf.Variable(tf.random_uniform(
                                     [self.subspace_num * self.subcenter_num, self.output_dim],
                                     minval=-1, maxval=1, dtype=tf.float32, name='centers'))
@@ -110,9 +100,6 @@ class TripletQuantization(object):
             self.ICM_best_centers_one_hot = tf.one_hot(ICM_best_centers, self.subcenter_num, dtype=tf.float32)
 
         self.global_step = tf.Variable(0, trainable=False)
-
-        self.G = tf.get_default_graph()
-
         self.train_op = self.apply_loss_function(self.global_step)
         self.sess.run(tf.global_variables_initializer())
         return
@@ -153,96 +140,43 @@ class TripletQuantization(object):
     def save_model(self, model_file=None):
         if model_file is None:
             model_file = self.save_dir
+
         model = {}
         for layer in self.deep_param_img:
             model[layer] = self.sess.run(self.deep_param_img[layer])
+
         print("saving model to %s" % model_file)
         folder = os.path.dirname(model_file)
         if os.path.exists(folder) is False:
             os.makedirs(folder)
+
         np.save(model_file, np.array(model))
         return
 
-
-    def quantize(self, x):
-        with self.G.gradient_override_map({"Sign": "QuantizeGrad"}):
-            return tf.sign(x)
-
     def triplet_loss(self, anchor, pos, neg, margin):
-        
         with tf.variable_scope('triplet_loss'):
-            if 'sign' in self.select_strategy:
-                # first version
-                #anchor_sign = tf.stop_gradient(tf.sign(anchor))
-                #pos_sign = tf.stop_gradient(tf.sign(pos))
-                #neg_sign = tf.stop_gradient(tf.sign(neg))
-                
-                #a_pos_dist = distance(anchor, pos_sign, pair=False, dist_type=self.dist_type)
-                #a_neg_dist = distance(anchor, neg_sign, pair=False, dist_type=self.dist_type)
-                #p_pos_dist = distance(anchor_sign, pos, pair=False, dist_type=self.dist_type)
-                #p_neg_dist = distance(anchor_sign, neg_sign, pair=False, dist_type=self.dist_type)
-                #n_pos_dist = distance(anchor_sign, pos_sign, pair=False, dist_type=self.dist_type)
-                #n_neg_dist = distance(anchor_sign, neg, pair=False, dist_type=self.dist_type)
+            pos_dist = distance(anchor, pos, pair=False, dist_type=self.dist_type)
+            neg_dist = distance(anchor, neg, pair=False, dist_type=self.dist_type)
+            basic_loss = tf.maximum(pos_dist - neg_dist + margin, 0.0)
+            loss = tf.reduce_mean(basic_loss, 0)
 
-                #basic_loss_a = tf.maximum(a_pos_dist - a_neg_dist + margin, 0.0)
-                #basic_loss_p = tf.maximum(p_pos_dist - p_neg_dist + margin, 0.0)
-                #basic_loss_n = tf.maximum(n_pos_dist - n_neg_dist + margin, 0.0)
-                
-                #loss = tf.reduce_mean(basic_loss_a+basic_loss_p+basic_loss_n, 0)/3
-                
-                #tf.summary.histogram('a_pos_dist', a_pos_dist)
-                #tf.summary.histogram('a_neg_dist', a_neg_dist)
-                #tf.summary.histogram('a_pos_dist - a_neg_dist', a_pos_dist - a_neg_dist)
-
-                # binarynet version
-                
-                anchor_sign = self.quantize(anchor)
-                pos_sign = self.quantize(pos)
-                neg_sign = self.quantize(neg)
-
-                pos_dist = distance(anchor_sign, pos_sign, pair=False, dist_type=self.dist_type)
-                neg_dist = distance(anchor_sign, neg_sign, pair=False, dist_type=self.dist_type)
-                basic_loss = tf.maximum(pos_dist - neg_dist + margin, 0.0)
-                
-                pos_dist_1 = distance(anchor, pos, pair=False, dist_type=self.dist_type)
-                neg_dist_1 = distance(anchor, neg, pair=False, dist_type=self.dist_type)
-                basic_loss_1 = tf.maximum(pos_dist_1 - neg_dist_1 + margin, 0.0)
-
-                loss = (tf.reduce_mean(basic_loss, 0) + tf.reduce_mean(basic_loss_1, 0)) / 2
-                
-                tf.summary.histogram('pos_dist', pos_dist)
-                tf.summary.histogram('neg_dist', neg_dist)
-                tf.summary.histogram('pos_dist - neg_dist', pos_dist - neg_dist)
-            else:
-                pos_dist = distance(anchor, pos, pair=False, dist_type=self.dist_type)
-                neg_dist = distance(anchor, neg, pair=False, dist_type=self.dist_type)
-                basic_loss = tf.maximum(pos_dist - neg_dist + margin, 0.0)
-                loss = tf.reduce_mean(basic_loss, 0)
-
-                tf.summary.histogram('pos_dist', pos_dist)
-                tf.summary.histogram('neg_dist', neg_dist)
-                tf.summary.histogram('pos_dist - neg_dist', pos_dist - neg_dist)
+            tf.summary.histogram('pos_dist', pos_dist)
+            tf.summary.histogram('neg_dist', neg_dist)
+            tf.summary.histogram('pos_dist - neg_dist', pos_dist - neg_dist)
 
         return loss
 
-    def c_quantization_loss(self, z, h):
-        with tf.name_scope('c_quantization_loss'):
-            q_loss = tf.reduce_mean(tf.reduce_sum(z - tf.matmul(h, self.C), -1))
-        return q_loss
-    
-    def quantization_loss(self, z):
+    def quantization_loss(self, z, h):
         with tf.name_scope('quantization_loss'):
-            q_loss = tf.reduce_mean(1.0 - tf.abs(z))
+            q_loss = tf.reduce_mean(tf.reduce_sum(z - tf.matmul(h, self.C), -1))
         return q_loss
 
     def apply_loss_function(self, global_step):
         anchor, pos, neg = tf.split(self.img_last_layer, 3, axis=0)
         triplet_loss = self.triplet_loss(anchor, pos, neg, self.triplet_margin)
-        cq_loss = self.c_quantization_loss(self.img_last_layer, self.b_img)
-        q_loss = self.quantization_loss(self.img_last_layer)
-        self.loss = triplet_loss + cq_loss * self.cq_lambda + q_loss * self.q_lambda
+        cq_loss = self.quantization_loss(self.img_last_layer, self.b_img)
+        self.loss = triplet_loss + cq_loss * self.cq_lambda
 
-        # Last layer has a 10 times learning rate
         self.lr = tf.train.exponential_decay(
                 self.learning_rate,
                 global_step,
@@ -250,7 +184,6 @@ class TripletQuantization(object):
                 self.decay_factor,
                 staircase=True)
         opt = tf.train.MomentumOptimizer(learning_rate=self.lr, momentum=0.9)
-
         grads_and_vars = opt.compute_gradients(self.loss, self.train_layers+self.train_last_layer)
         fcgrad, _ = grads_and_vars[-2]
         fbgrad, _ = grads_and_vars[-1]
@@ -258,10 +191,10 @@ class TripletQuantization(object):
         tf.summary.scalar('loss', self.loss)
         tf.summary.scalar('triplet_loss', triplet_loss)
         tf.summary.scalar('cq_loss', cq_loss)
-        tf.summary.scalar('q_loss', q_loss)
         tf.summary.scalar('lr', self.lr)
         self.merged = tf.summary.merge_all()
 
+        # Last layer has a 10 times learning rate
         if self.finetune_all:
             return opt.apply_gradients([(grads_and_vars[0][0], self.train_layers[0]),
                                         (grads_and_vars[1][0]*2, self.train_layers[1]),
@@ -285,7 +218,6 @@ class TripletQuantization(object):
 
     def initial_centers(self, img_output):
         C_init = np.zeros([self.subspace_num * self.subcenter_num, self.output_dim])
-        print("#TripletQuantization train# initilizing Centers")
         all_output = img_output
         for i in range(self.subspace_num):
             start = i*int(self.output_dim/self.subspace_num)
@@ -375,7 +307,7 @@ class TripletQuantization(object):
         for i in range(epoch_iter):
             images, labels, codes = img_dataset.next_batch(self.batch_size)
             output = self.sess.run(self.img_last_layer,
-                                   feed_dict={self.img: images, self.img_label: labels, self.b_img: codes})
+                                   feed_dict={self.img: images, self.b_img: codes})
 
             img_dataset.feed_batch_output(self.batch_size, output)
         img_dataset.update_triplets(self.triplet_margin, n_part=self.n_part, select_strategy=self.select_strategy)
@@ -415,7 +347,6 @@ class TripletQuantization(object):
                 _, output, loss, summary = self.sess.run(
                     [self.train_op, self.img_last_layer, self.loss, self.merged],
                     feed_dict={self.img: images,
-                               self.img_label: labels,
                                self.b_img: codes})
                 img_dataset.feed_batch_triplet_output(triplet_batch_size, output)
                 if train_iter < 100 or i % 100 == 0:
@@ -455,7 +386,6 @@ class TripletQuantization(object):
             images, labels, codes = img_dataset.next_batch(self.val_batch_size)
             output = self.sess.run([self.img_last_layer],
                                    feed_dict={self.img: images,
-                                              self.img_label: labels,
                                               self.stage: 1})
             img_dataset.feed_batch_output(self.val_batch_size, output)
             if i % val_print_freq == 0:
@@ -480,32 +410,11 @@ class TripletQuantization(object):
         # Evaluation
         print("%s #validation# calculating MAP@%d" % (datetime.now(), R))
         C_tmp = self.sess.run(self.C)
-
+        mAPs = MAPs_CQ(C_tmp, self.subspace_num, self.subcenter_num, R)
         self.save_codes(img_database, img_query, C_tmp)
-
-        mAPs = MAPs(R)
-        prec, rec, mmap = mAPs.get_precision_recall_by_Hamming_Radius(img_database, img_query, 2)
-
         return {
             'map_feature_ip': mAPs.get_mAPs_by_feature(img_database, img_query),
-            'map_sign_ip': mAPs.get_mAPs_after_sign(img_database, img_query),
-            'prec_radius_2': prec,
-            'recall_radius_2': rec, 
-            'map_radius_2': mmap 
+            'map_AQD_ip':  mAPs.get_mAPs_AQD(img_database, img_query),
+            'map_SQD_ip': mAPs.get_mAPs_SQD(img_database, img_query)
         }
 
-
-def train(train_img, database_img, query_img, config):
-    model = TripletQuantization(config)  # 0 for train, 1 for val
-    img_database = Dataset(database_img, config.output_dim, config.n_subspace * config.n_subcenter)
-    img_query = Dataset(query_img, config.output_dim, config.n_subspace * config.n_subcenter)
-    img_train = Dataset(train_img, config.output_dim, config.n_subspace * config.n_subcenter)
-    model.train_cq(img_train, img_query, img_database, config.R)
-    return model.save_dir
-
-
-def validation(database_img, query_img, config):
-    model = TripletQuantization(config)  # 0 for train, 1 for val
-    img_database = Dataset(database_img, config.output_dim, config.n_subspace * config.n_subcenter)
-    img_query = Dataset(query_img, config.output_dim, config.n_subspace * config.n_subcenter)
-    return model.validation(img_query, img_database, config.R)
