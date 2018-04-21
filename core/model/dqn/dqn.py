@@ -1,6 +1,6 @@
 #################################################################################
-# Deep Visual-Semantic Quantization for Efficient Image Retrieval                #
-# Authors: Yue Cao, Mingsheng Long, Jianmin Wang, Shichen Liu                    #
+# Deep Quantization Network for Efficient Image Retrieval                        #
+# Authors: Yue Cao, Mingsheng Long, Jianmin Wang, Han Zhu, Qingfu Wen            #
 # Contact: caoyue10@gmail.com                                                    #
 ##################################################################################
 
