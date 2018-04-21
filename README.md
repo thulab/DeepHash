@@ -23,18 +23,16 @@ For more details see *[TensorFlow installation instructions](https://github.com/
 
 To easily use our lib, we need to install scipy, python-opencv, h5py, scikit-learn, coverage.py and pytest by:
 
-```python
+```shell
 pip install scipy 
 sudo apt-get install python-opencv
 pip install h5py
 pip install -U scikit-learn
-pip install coverage
-pip install pytest
 ```
 
 To use the algorithms implemented in `./core`, we need to add the path of `./core` to environment variables as:
 
-```python
+```shell
 export PYTHONPATH=/path/to/project/DeepHash/core:$PYTHONPATH
 ```             
 
