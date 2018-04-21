@@ -30,10 +30,10 @@ pip install h5py
 pip install -U scikit-learn
 ```
 
-To use the algorithms implemented in `./core`, we need to add the path of `./core` to environment variables as:
+To use the algorithms implemented in `./DeepHash`, we need to add the path of `./DeepHash` to environment variables as:
 
 ```shell
-export PYTHONPATH=/path/to/project/DeepHash/core:$PYTHONPATH
+export PYTHONPATH=/path/to/project/DeepHash/DeepHash:$PYTHONPATH
 ```             
 
 ## Data Preparation
@@ -41,16 +41,16 @@ In `data/cifar10/train.txt`, we give an example to show how to prepare image tra
 
 ## Get Started
 The example of `$method` (DCH, DVSQ, DQN and DHN) can be run with the following command:
-```
+```shell
 cd example/$method/
 ./train_val.sh
 ```
 
-## Core
-* `./core/model/`: contains the implementation of models: dhn, dqn, dvsq and dch.
-* `./core/architecture/`: contains the implementation of network structure, e.g. AlexNet.
-* `./core/data_provider/`: contains the data reader implementation.
-* `./core/evaluation/`: contains the implementation of evaluation criteria in search procedure, such as mAP, precision, recall and so on.
+## DeepHash
+* `./DeepHash/model/`: contains the implementation of models: dhn, dqn, dvsq and dch.
+* `./DeepHash/architecture/`: contains the implementation of network structure, e.g. AlexNet.
+* `./DeepHash/data_provider/`: contains the data reader implementation.
+* `./DeepHash/evaluation/`: contains the implementation of evaluation criteria in search procedure, such as mAP, precision, recall and so on.
 <!--**Data\_provider**-->
 <!--**Architecture**-->
 <!--**Model**-->
