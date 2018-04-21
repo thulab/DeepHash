@@ -1,6 +1,6 @@
 #################################################################################
-# Deep Hashing Network for Efficient Similarity Retrieval                        #
-# Authors: Han Zhu, Mingsheng Long, Jianmin Wang, Yue Cao                        #
+# Deep Cauchy Hashing for Hamming Space Retrieval                                #
+# Authors: Yue Cao, Mingsheng Long, Bin Liu, Jianmin Wang                        #
 # Contact: caoyue10@gmail.com                                                    #
 ##################################################################################
 
