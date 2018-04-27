@@ -2,7 +2,18 @@
 
 DeepHash is a lightweight deep learning to hash library that implements state-of-the-art deep hashing/quantization algorithms. We will implement more representative deep hashing models continuously according to our released [paper list](https://github.com/caoyue10/DeepHashingBaselines). Specifically, we welcome other researchers to contribute deep hashing models into this toolkit based on our framework. We will announce the contribution in this project.
 
-The implemented models include [Deep Quantization Network (DQN)](http://yue-cao.me/doc/deep-quantization-networks-dqn-aaai16.pdf), [Deep Hashing Network (DHN)](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-hashing-network-aaai16.pdf), [Deep Visual-Semantic Quantization (DVSQ)](http://yue-cao.me/doc/deep-visual-semantic-quantization-cvpr17.pdf) and [Deep Cauchy Hashing (DCH)](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-cauchy-hashing-cvpr18.pdf).
+The implemented models include: 
+
+* DQN: [Deep Quantization Network for Efficient Image Retrieval](http://yue-cao.me/doc/deep-quantization-networks-dqn-aaai16.pdf), Yue Cao, Mingsheng Long, Jianmin Wang, Han Zhu, Qingfu Wen, AAAI Conference on Artificial Intelligence (AAAI), 2016
+* DHN: [Deep Hashing Network for Efficient Similarity Retrieval](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-hashing-network-aaai16.pdf), Han Zhu, Mingsheng Long, Jianmin Wang, Yue Cao, AAAI Conference on Artificial Intelligence (AAAI), 2016
+* DVSQ: [Deep Visual-Semantic Quantization for Efficient Image Retrieval](http://yue-cao.me/doc/deep-visual-semantic-quantization-cvpr17.pdf), Yue Cao, Mingsheng Long, Jianmin Wang, Shichen Liu, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017 
+* DCH: [Deep Cauchy Hashing for Hamming Space Retrieval](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-cauchy-hashing-cvpr18.pdf), Yue Cao, Mingsheng Long, Bin Liu, Jianmin Wang, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2018
+
+<!--* `DCH`: Deep Cauchy Hashing for Hamming Space Retrieval, Yue Cao, Mingsheng Long, Bin Liu, Jianmin Wang, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2018-->
+<!--* `DVSQ`: Deep Visual-Semantic Quantization for Efficient Image Retrieval, Yue Cao, Mingsheng Long, Jianmin Wang, Shichen Liu, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017-->
+<!--* `DQN`: Deep Quantization Network for Efficient Image Retrieval, Yue Cao, Mingsheng Long, Jianmin Wang, Han Zhu, Qingfu Wen, AAAI Conference on Artificial Intelligence (AAAI), 2016-->
+<!--* `DHN`: Deep Hashing Network for Efficient Similarity Retrieval, Han Zhu, Mingsheng Long, Jianmin Wang, Yue Cao, AAAI Conference on Artificial Intelligence (AAAI), 2016-->
+
 
 ## Requirements
 
@@ -55,21 +66,17 @@ cd example/$method/
 ./train_val.sh
 ```
 
-## DeepHash
-* `./DeepHash/model/`: contains the implementation of models: dhn, dqn, dvsq and dch.
-* `./DeepHash/architecture/`: contains the implementation of network structure, e.g. AlexNet.
-* `./DeepHash/data_provider/`: contains the data reader implementation.
-* `./DeepHash/evaluation/`: contains the implementation of evaluation criteria in search procedure, such as mAP, precision, recall and so on.
+<!-- DeepHash-->
+<!--* `./DeepHash/model/`: contains the implementation of models: dhn, dqn, dvsq and dch.-->
+<!--* `./DeepHash/architecture/`: contains the implementation of network structure, e.g. AlexNet.-->
+<!--* `./DeepHash/data_provider/`: contains the data reader implementation.-->
+<!--* `./DeepHash/evaluation/`: contains the implementation of evaluation criteria in search procedure, such as mAP, precision, recall and so on.-->
 <!--**Data\_provider**-->
 <!--**Architecture**-->
 <!--**Model**-->
 <!--**Evaluation**-->
 
-## Methods
-* `DCH`: Deep Cauchy Hashing for Hamming Space Retrieval, Yue Cao, Mingsheng Long, Bin Liu, Jianmin Wang, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2018
-* `DVSQ`: Deep Visual-Semantic Quantization for Efficient Image Retrieval, Yue Cao, Mingsheng Long, Jianmin Wang, Shichen Liu, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017
-* `DQN`: Deep Quantization Network for Efficient Image Retrieval, Yue Cao, Mingsheng Long, Jianmin Wang, Han Zhu, Qingfu Wen, AAAI Conference on Artificial Intelligence (AAAI), 2016
-* `DHN`: Deep Hashing Network for Efficient Similarity Retrieval, Han Zhu, Mingsheng Long, Jianmin Wang, Yue Cao, AAAI Conference on Artificial Intelligence (AAAI), 2016
+<!-- Methods-->
 
 ## Citations
 If you find *DeepHash* is useful for your research, please consider citing the following papers:
