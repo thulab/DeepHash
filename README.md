@@ -6,31 +6,38 @@ The implemented models include [Deep Quantization Network (DQN)](http://yue-cao.
 
 ## Requirements
 
-**TensorFlow Installation**
+-  numpy==1.13.1
+-  scipy==0.19.1
+-  tensorflow==1.3.0
+-  h5py==3.0.1
+-  scikit-learn==0.19.0
+-  python-opencv==3.0.1
 
-Our hash learning lib requires Tensorflow (version 1.0+) to be installed.
+<!--**TensorFlow Installation**-->
 
-To install TensorFlow, simply run:
-```
-pip install tensorflow
-```
-or, with GPU-support:
-```
-pip install tensorflow-gpu
-```
+<!--Our hash learning lib requires Tensorflow (version 1.0+) to be installed.-->
 
-For more details see *[TensorFlow installation instructions](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/g3doc/get_started/os_setup.md)*
+<!--To install TensorFlow, simply run:-->
+<!--```-->
+<!--pip install tensorflow-->
+<!--```-->
+<!--or, with GPU-support:-->
+<!--```-->
+<!--pip install tensorflow-gpu-->
+<!--```-->
 
-**Other Installation**
+<!--For more details see *[TensorFlow installation instructions](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/g3doc/get_started/os_setup.md)*-->
 
-To easily use our lib, we need to install scipy, python-opencv, h5py, scikit-learn, coverage.py and pytest by:
+<!--**Other Installation**-->
 
-```shell
-pip install scipy 
-sudo apt-get install python-opencv
-pip install h5py
-pip install -U scikit-learn
-```
+<!--To easily use our lib, we need to install scipy, python-opencv, h5py, scikit-learn, coverage.py and pytest by:-->
+
+<!--```shell-->
+<!--pip install scipy -->
+<!--sudo apt-get install python-opencv-->
+<!--pip install h5py-->
+<!--pip install -U scikit-learn-->
+<!--```-->
 
 To use the algorithms implemented in `./DeepHash`, we need to add the path of `./DeepHash` to environment variables as:
 
