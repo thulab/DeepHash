@@ -13,7 +13,7 @@ from math import ceil
 import numpy as np
 import tensorflow as tf
 
-from architecture.single_model import img_alexnet_layers
+from architecture import img_alexnet_layers
 from evaluation import MAPs
 from .util import Dataset
 

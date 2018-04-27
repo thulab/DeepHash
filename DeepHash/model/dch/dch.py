@@ -14,7 +14,7 @@ import numpy as np
 import tensorflow as tf
 
 import model.plot as plot
-from architecture.single_model import img_alexnet_layers
+from architecture import img_alexnet_layers
 from evaluation import MAPs
 
 
