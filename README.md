@@ -1,6 +1,6 @@
 # DeepHash
 
-DeepHash is a lightweight deep learning to hash library that implements state-of-the-art deep hashing/quantization algorithms. We will implement more representative deep hashing models continuously according to our released [paper list](https://github.com/caoyue10/DeepHashingBaselines). Specifically, we welcome other researchers to contribute deep hashing models into this toolkit based on our framework. We will announce the contribution in this project.
+DeepHash is a lightweight deep learning to hash library that implements state-of-the-art deep hashing/quantization algorithms. We will implement more representative deep hashing models continuously according to our released [deep hashing paper list](https://github.com/caoyue10/DeepHashingBaselines). Specifically, we welcome other researchers to contribute deep hashing models into this toolkit based on our framework. We will announce the contribution in this project.
 
 The implemented models include: 
 
@@ -9,74 +9,45 @@ The implemented models include:
 * DVSQ: [Deep Visual-Semantic Quantization for Efficient Image Retrieval](http://yue-cao.me/doc/deep-visual-semantic-quantization-cvpr17.pdf), Yue Cao, Mingsheng Long, Jianmin Wang, Shichen Liu, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017 
 * DCH: [Deep Cauchy Hashing for Hamming Space Retrieval](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-cauchy-hashing-cvpr18.pdf), Yue Cao, Mingsheng Long, Bin Liu, Jianmin Wang, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2018
 
-<!--* `DCH`: Deep Cauchy Hashing for Hamming Space Retrieval, Yue Cao, Mingsheng Long, Bin Liu, Jianmin Wang, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2018-->
-<!--* `DVSQ`: Deep Visual-Semantic Quantization for Efficient Image Retrieval, Yue Cao, Mingsheng Long, Jianmin Wang, Shichen Liu, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017-->
-<!--* `DQN`: Deep Quantization Network for Efficient Image Retrieval, Yue Cao, Mingsheng Long, Jianmin Wang, Han Zhu, Qingfu Wen, AAAI Conference on Artificial Intelligence (AAAI), 2016-->
-<!--* `DHN`: Deep Hashing Network for Efficient Similarity Retrieval, Han Zhu, Mingsheng Long, Jianmin Wang, Yue Cao, AAAI Conference on Artificial Intelligence (AAAI), 2016-->
-
 
 ## Requirements
 
--  numpy==1.13.1
--  scipy==0.19.1
--  tensorflow==1.3.0
--  h5py==3.0.1
--  scikit-learn==0.19.0
--  python-opencv==3.0.1
+-  Python3
+-  other packages: `pip install tensorflow-gpu scipy `
 
-<!--**TensorFlow Installation**-->
-
-<!--Our hash learning lib requires Tensorflow (version 1.0+) to be installed.-->
-
-<!--To install TensorFlow, simply run:-->
-<!--```-->
-<!--pip install tensorflow-->
-<!--```-->
-<!--or, with GPU-support:-->
-<!--```-->
-<!--pip install tensorflow-gpu-->
-<!--```-->
-
-<!--For more details see *[TensorFlow installation instructions](https://github.com/tensorflow/tensorflow/blob/master/tensorflow/g3doc/get_started/os_setup.md)*-->
-
-<!--**Other Installation**-->
-
-<!--To easily use our lib, we need to install scipy, python-opencv, h5py, scikit-learn, coverage.py and pytest by:-->
-
-<!--```shell-->
-<!--pip install scipy -->
-<!--sudo apt-get install python-opencv-->
-<!--pip install h5py-->
-<!--pip install -U scikit-learn-->
-<!--```-->
-
-To use the algorithms implemented in `./DeepHash`, we need to add the path of `./DeepHash` to environment variables as:
+To import the algorithms implemented in `./DeepHash`, we need to add the path of `./DeepHash` to environment variables as:
 
 ```shell
 export PYTHONPATH=/path/to/project/DeepHash/DeepHash:$PYTHONPATH
-```             
+```
 
 ## Data Preparation
 In `data/cifar10/train.txt`, we give an example to show how to prepare image training data. In `data/cifar10/test.txt` and `data/cifar10/database.txt`, the list of testing and database images could be processed during predicting procedure. If you want to add other datasets as the input, you need to prepare `train.txt`, `test.txt` and `database.txt` as CIFAR-10 dataset.
 
 ## Get Started
+
+### Pre-trained model
+
+You should manually download the model file of the Imagenet pre-tained AlexNet from [here](https://github.com/thuml/DeepHash/releases/download/v0/reference_pretrain.npy.zip) or from release page and unzip it to `/path/to/DeepHash/DeepHash/architecture/single_model/pretrained_model`.
+
+Make sure the tree of `/path/to/DeepHash lib/DeepHash/architecture` looks like this:
+
+├── __init__.py
+├── multi_model
+│   └── __init__.py
+└── single_model
+    ├── __init__.py
+    ├── pretrained_model
+         └── reference_pretrain.npy
+
+### Training and Testing
+
 The example of `$method` (DCH, DVSQ, DQN and DHN) can be run with the following command:
+
 ```shell
 cd example/$method/
-./train_val.sh
+python train_val_script.py --gpus "0,1" --"other parameters descirbe in train_val_script.py"
 ```
-
-<!-- DeepHash-->
-<!--* `./DeepHash/model/`: contains the implementation of models: dhn, dqn, dvsq and dch.-->
-<!--* `./DeepHash/architecture/`: contains the implementation of network structure, e.g. AlexNet.-->
-<!--* `./DeepHash/data_provider/`: contains the data reader implementation.-->
-<!--* `./DeepHash/evaluation/`: contains the implementation of evaluation criteria in search procedure, such as mAP, precision, recall and so on.-->
-<!--**Data\_provider**-->
-<!--**Architecture**-->
-<!--**Model**-->
-<!--**Evaluation**-->
-
-<!-- Methods-->
 
 ## Citations
 If you find *DeepHash* is useful for your research, please consider citing the following papers:
@@ -109,8 +80,7 @@ If you find *DeepHash* is useful for your research, please consider citing the f
       Year={2018}
     }
 
-
 ## Contacts
-Maintainers of hash learning library:
+Maintainers of  this library:
 * Yue Cao, Email: caoyue10@gmail.com
 * Bin Liu, Email: liubinthss@gmail.com
