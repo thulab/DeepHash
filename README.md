@@ -13,7 +13,7 @@ The implemented models include:
 ## Requirements
 
 -  Python3
--  Other packages: `pip install tensorflow-gpu scipy `
+-  Other packages: `pip install tensorflow-gpu scipy h5py`
 
 To import the algorithms implemented in `./DeepHash`, we need to add the path of `./DeepHash` to environment variables as:
 
