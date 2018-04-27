@@ -67,33 +67,33 @@ cd example/$method/
 ## Citations
 If you find *DeepHash* is useful for your research, please consider citing the following papers:
 
-   @inproceedings{cite:AAAI16DQN,
-    Author = {Yue Cao and Mingsheng Long and Jianmin Wang and Han Zhu and Qingfu Wen},
-    Publisher = {AAAI},
-    Title = {Deep Quantization Network for Efficient Image Retrieval},
-    Year = {2016}
-   } 
-
-   @inproceedings{cite:AAAI16DHN,
-    Author = {Han Zhu and Mingsheng Long and Jianmin Wang and Yue Cao},
-    Publisher = {AAAI},
-    Title = {Deep Hashing Network for Efficient Similarity Retrieval},
-    Year = {2016}
-   }
-
-   @inproceedings{cite:CVPR17DVSQ,
-    Title={Deep visual-semantic quantization for efficient image retrieval},
-    Author={Cao, Yue and Long, Mingsheng and Wang, Jianmin and Liu, Shichen},
-    Booktitle={CVPR},
-    Year={2017}
-   }
-
-   @inproceedings{cite:CVPR18DCH,
-    Title={Deep Cauchy Hashing for Hamming Space Retrieval},
-    Author={Cao, Yue and Long, Mingsheng and Bin, Liu and Wang, Jianmin},
-    Booktitle={CVPR},
-    Year={2018}
-   }
+    @InProceedings{cite:AAAI16DQN,
+      Author = {Yue Cao and Mingsheng Long and Jianmin Wang and Han Zhu and Qingfu Wen},
+      Publisher = {AAAI},
+      Title = {Deep Quantization Network for Efficient Image Retrieval},
+      Year = {2016}
+    }
+    
+    @InProceedings{cite:AAAI16DHN,
+      Author = {Han Zhu and Mingsheng Long and Jianmin Wang and Yue Cao},
+      Publisher = {AAAI},
+      Title = {Deep Hashing Network for Efficient Similarity Retrieval},
+      Year = {2016}
+    }
+    
+    @InProceedings{cite:CVPR17DVSQ,
+      Title={Deep visual-semantic quantization for efficient image retrieval},
+      Author={Cao, Yue and Long, Mingsheng and Wang, Jianmin and Liu, Shichen},
+      Booktitle={CVPR},
+      Year={2017}
+    }
+    
+    @InProceedings{cite:CVPR18DCH,
+      Title={Deep Cauchy Hashing for Hamming Space Retrieval},
+      Author={Cao, Yue and Long, Mingsheng and Bin, Liu and Wang, Jianmin},
+      Booktitle={CVPR},
+      Year={2018}
+    }
 
 
 ## Contacts
