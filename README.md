@@ -1,6 +1,6 @@
 # DeepHash
 
-DeepHash is a lightweight deep learning to hash library that implements state-of-the-art deep hashing/quantization algorithms. We will implement more representative deep hashing models continuously according to our released paper list. Specifically, we welcome other researchers to contribute deep hashing models into this toolkit based on our framework. We will announce the contribution in this project.
+DeepHash is a lightweight deep learning to hash library that implements state-of-the-art deep hashing/quantization algorithms. We will implement more representative deep hashing models continuously according to our released [paper list](https://github.com/caoyue10/DeepHashingBaselines). Specifically, we welcome other researchers to contribute deep hashing models into this toolkit based on our framework. We will announce the contribution in this project.
 
 The implemented models include [Deep Quantization Network (DQN)](http://yue-cao.me/doc/deep-quantization-networks-dqn-aaai16.pdf), [Deep Hashing Network (DHN)](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-hashing-network-aaai16.pdf), [Deep Visual-Semantic Quantization (DVSQ)](http://yue-cao.me/doc/deep-visual-semantic-quantization-cvpr17.pdf) and [Deep Cauchy Hashing (DCH)](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-cauchy-hashing-cvpr18.pdf).
 
