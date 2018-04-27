@@ -37,7 +37,7 @@ parser.set_defaults(with_tanh=True)
 
 parser.add_argument('--img-model', default='alexnet', type=str)
 parser.add_argument('--model-weights', type=str,
-                    default='../../DeepHash/architecture/single_model/pretrained_model/reference_pretrain.npy')
+                    default='../../DeepHash/architecture/pretrained_model/reference_pretrain.npy')
 parser.add_argument('--finetune-all', default=True, type=bool)
 parser.add_argument('--max-iter-update-b', default=3, type=int)
 parser.add_argument('--max-iter-update-Cb', default=1, type=int)

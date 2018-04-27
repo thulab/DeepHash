@@ -9,7 +9,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.cluster import MiniBatchKMeans
 
-from architecture.single_model import img_alexnet_layers
+from architecture import img_alexnet_layers
 from distance.tfversion import distance
 from evaluation import MAPs_CQ
 

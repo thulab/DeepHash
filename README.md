@@ -28,18 +28,14 @@ In `data/cifar10/train.txt`, we give an example to show how to prepare image tra
 
 ### Pre-trained model
 
-You should manually download the model file of the Imagenet pre-tained AlexNet from [here](https://github.com/thuml/DeepHash/releases/download/v0/reference_pretrain.npy.zip) or from release page and unzip it to `/path/to/project/DeepHash/architecture/single_model/pretrained_model`.
+You should manually download the model file of the Imagenet pre-tained AlexNet from [here](https://github.com/thuml/DeepHash/releases/download/v0/reference_pretrain.npy.zip) or from release page and unzip it to `/path/to/project/DeepHash/architecture/pretrained_model`.
 
 Make sure the tree of `/path/to/project/DeepHash/architecture` looks like this:
 
 ```
 ├── __init__.py
-├── multi_model
-│   └── __init__.py
-└── single_model
-    ├── __init__.py
-    ├── pretrained_model
-         └── reference_pretrain.npy
+├── pretrained_model
+       └── reference_pretrain.npy
 ```
 
 ### Training and Testing
