@@ -1,8 +1,10 @@
-## Overall
+# DeepHash
 
-The DeepHash package is a lightweight deep learning to hash library based on TensorFlow. This repository contains newly designed deep learning to hash and quantization methods, e.g. DHN, DQN, DVSQ and DCH. Besides, hash learning library provides high-level APIs and working examples for defining, training, fine-tuning and evaluating hashing models.
+DeepHash is a lightweight deep learning to hash library that implements state-of-the-art deep hashing/quantization algorithms. We will implement more representative deep hashing models continuously according to our released paper list. Specifically, we welcome other researchers to contribute deep hashing models into this toolkit based on our framework. We will announce the contribution in this project.
 
-## Installation
+The implemented models include [Deep Quantization Network (DQN)](http://yue-cao.me/doc/deep-quantization-networks-dqn-aaai16.pdf), [Deep Hashing Network (DHN)](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-hashing-network-aaai16.pdf), [Deep Visual-Semantic Quantization (DVSQ)](http://yue-cao.me/doc/deep-visual-semantic-quantization-cvpr17.pdf) and [Deep Cauchy Hashing (DCH)](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-cauchy-hashing-cvpr18.pdf).
+
+## Requirements
 
 **TensorFlow Installation**
 
@@ -61,6 +63,34 @@ cd example/$method/
 * `DVSQ`: Deep Visual-Semantic Quantization for Efficient Image Retrieval, Yue Cao, Mingsheng Long, Jianmin Wang, Shichen Liu, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017
 * `DQN`: Deep Quantization Network for Efficient Image Retrieval, Yue Cao, Mingsheng Long, Jianmin Wang, Han Zhu, Qingfu Wen, AAAI Conference on Artificial Intelligence (AAAI), 2016
 * `DHN`: Deep Hashing Network for Efficient Similarity Retrieval, Han Zhu, Mingsheng Long, Jianmin Wang, Yue Cao, AAAI Conference on Artificial Intelligence (AAAI), 2016
+
+## Citations
+If you find DeepHash is useful for your research, please consider citing the following papers:
+
+   @inproceedings{cite:AAAI16DQN,
+	Author = {Yue Cao and Mingsheng Long and Jianmin Wang and Han Zhu and Qingfu Wen},
+	Publisher = {AAAI},
+	Title = {Deep Quantization Network for Efficient Image Retrieval},
+	Year = {2016}} 
+
+   @inproceedings{cite:AAAI16DHN,
+	Author = {Han Zhu and Mingsheng Long and Jianmin Wang and Yue Cao},
+	Publisher = {AAAI},
+	Title = {Deep Hashing Network for Efficient Similarity Retrieval},
+	Year = {2016}}
+
+   @inproceedings{cite:CVPR17DVSQ,
+  Title={Deep visual-semantic quantization for efficient image retrieval},
+  Author={Cao, Yue and Long, Mingsheng and Wang, Jianmin and Liu, Shichen},
+  Booktitle={CVPR},
+  Year={2017}}
+
+   @inproceedings{cite:CVPR18DCH,
+  Title={Deep Cauchy Hashing for Hamming Space Retrieval},
+  Author={Cao, Yue and Long, Mingsheng and Bin, Liu and Wang, Jianmin},
+  Booktitle={CVPR},
+  Year={2018}}
+
 
 ## Contacts
 Maintainers of hash learning library:
