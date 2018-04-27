@@ -13,7 +13,7 @@ The implemented models include:
 ## Requirements
 
 -  Python3
--  other packages: `pip install tensorflow-gpu scipy `
+-  Other packages: `pip install tensorflow-gpu scipy `
 
 To import the algorithms implemented in `./DeepHash`, we need to add the path of `./DeepHash` to environment variables as:
 
@@ -28,10 +28,11 @@ In `data/cifar10/train.txt`, we give an example to show how to prepare image tra
 
 ### Pre-trained model
 
-You should manually download the model file of the Imagenet pre-tained AlexNet from [here](https://github.com/thuml/DeepHash/releases/download/v0/reference_pretrain.npy.zip) or from release page and unzip it to `/path/to/DeepHash/DeepHash/architecture/single_model/pretrained_model`.
+You should manually download the model file of the Imagenet pre-tained AlexNet from [here](https://github.com/thuml/DeepHash/releases/download/v0/reference_pretrain.npy.zip) or from release page and unzip it to `/path/to/project/DeepHash/architecture/single_model/pretrained_model`.
 
-Make sure the tree of `/path/to/DeepHash lib/DeepHash/architecture` looks like this:
+Make sure the tree of `/path/to/project/DeepHash/architecture` looks like this:
 
+```
 ├── __init__.py
 ├── multi_model
 │   └── __init__.py
@@ -39,6 +40,7 @@ Make sure the tree of `/path/to/DeepHash lib/DeepHash/architecture` looks like t
     ├── __init__.py
     ├── pretrained_model
          └── reference_pretrain.npy
+```
 
 ### Training and Testing
 
