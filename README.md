@@ -8,6 +8,7 @@ The implemented models include:
 * DHN: [Deep Hashing Network for Efficient Similarity Retrieval](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-hashing-network-aaai16.pdf), Han Zhu, Mingsheng Long, Jianmin Wang, Yue Cao, AAAI Conference on Artificial Intelligence (AAAI), 2016
 * DVSQ: [Deep Visual-Semantic Quantization for Efficient Image Retrieval](http://yue-cao.me/doc/deep-visual-semantic-quantization-cvpr17.pdf), Yue Cao, Mingsheng Long, Jianmin Wang, Shichen Liu, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017 
 * DCH: [Deep Cauchy Hashing for Hamming Space Retrieval](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-cauchy-hashing-cvpr18.pdf), Yue Cao, Mingsheng Long, Bin Liu, Jianmin Wang, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2018
+* DTQ: [Deep Triplet Quantization](ise.thss.tsinghua.edu.cn/~mlong/doc/deep-triplet-quantization-acmmm18.pdf), Bin Liu, Yue Cao, Mingsheng Long, Jianmin Wang, Jingdong Wang, ACM Multimedia (ACMMM), 2018
 
 
 ## Requirements
@@ -76,6 +77,13 @@ If you find *DeepHash* is useful for your research, please consider citing the f
       Author={Cao, Yue and Long, Mingsheng and Bin, Liu and Wang, Jianmin},
       Booktitle={CVPR},
       Year={2018}
+    }
+    
+    @article{liu2018deep,
+      title={Deep triplet quantization},
+      author={Liu, Bin and Cao, Yue and Long, Mingsheng and Wang, Jianmin and Wang, Jingdong},
+      journal={MM, ACM},
+      year={2018}
     }
 
 ## Contacts
