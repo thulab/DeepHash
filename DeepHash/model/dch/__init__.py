@@ -7,7 +7,7 @@ def train(train_img, database_img, query_img, config):
     img_query = Dataset(query_img, config.output_dim)
     img_train = Dataset(train_img, config.output_dim)
     model.train(img_train)
-    return model.save_dir
+    return model.save_file
 
 def validation(database_img, query_img, config):
     model = DCH(config)
