@@ -10,7 +10,7 @@ The implemented models include:
 * DCH: [Deep Cauchy Hashing for Hamming Space Retrieval](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-cauchy-hashing-cvpr18.pdf), Yue Cao, Mingsheng Long, Bin Liu, Jianmin Wang, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2018
 * DTQ: [Deep Triplet Quantization](ise.thss.tsinghua.edu.cn/~mlong/doc/deep-triplet-quantization-acmmm18.pdf), Bin Liu, Yue Cao, Mingsheng Long, Jianmin Wang, Jingdong Wang, ACM Multimedia (ACMMM), 2018
 
-Note: DTQ and DCH are updated while DQN, DHN, DVSQ maybe outdated, feel free to touch us if you have any questions.
+Note: DTQ and DCH are updated while DQN, DHN, DVSQ maybe outdated, feel free to touch us if you have any questions. We  welcome others to contribute!
 
 ## Requirements
 
