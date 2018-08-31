@@ -13,10 +13,18 @@ The implemented models include:
 
 ## Requirements
 
--  Python3
--  Other packages: `pip install tensorflow-gpu scipy h5py`
+-  Python3: Anaconda is recommended because it already contains a lot of packages: 
+```
+conda create -n DeepHash python=3.6 anaconda
+source activate DeepHash
+```
+-  Other packages: 
+```
+conda install -y tensorflow-gpu
+conda install -y -c conda-forge opencv
+```
 
-To import the algorithms implemented in `./DeepHash`, we need to add the path of `./DeepHash` to environment variables as:
+To import the pakcages implemented in `./DeepHash`, we need to add the path of `./DeepHash` to environment variables as:
 
 ```shell
 export PYTHONPATH=/path/to/project/DeepHash/DeepHash:$PYTHONPATH
@@ -24,6 +32,8 @@ export PYTHONPATH=/path/to/project/DeepHash/DeepHash:$PYTHONPATH
 
 ## Data Preparation
 In `data/cifar10/train.txt`, we give an example to show how to prepare image training data. In `data/cifar10/test.txt` and `data/cifar10/database.txt`, the list of testing and database images could be processed during predicting procedure. If you want to add other datasets as the input, you need to prepare `train.txt`, `test.txt` and `database.txt` as CIFAR-10 dataset.
+
+We also recommend you to follow https://github.com/thuml/HashNet/tree/master/pytorch#datasets to prepare NUSWIDE_81 and COCO datasets.
 
 ## Get Started
 
@@ -41,7 +51,7 @@ Make sure the tree of `/path/to/project/DeepHash/architecture` looks like this:
 
 ### Training and Testing
 
-The example of `$method` (DCH, DVSQ, DQN and DHN) can be run with the following command:
+The example of `$method` (DCH, DVSQ, DQN, DHN and DTQ) can be run like:
 
 ```shell
 cd example/$method/
