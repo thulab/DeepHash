@@ -19,6 +19,7 @@ alpha = float(sys.argv[5])
 _dataset = sys.argv[6]
 gpu = sys.argv[7]
 log_dir = sys.argv[8]
+data_root = sys.argv[9]
 
 label_dims = {'cifar10': 10, 'cub': 200, 'nuswide_21': 21,
               'nuswide_81': 81, 'coco': 80, 'imagenet': 100, 'cifar10_zero_shot': 10}
@@ -60,11 +61,11 @@ config = {
 
 pprint(config)
 
-train_img = dataset.import_train(config['img_tr'])
+train_img = dataset.import_train(data_root, config['img_tr'])
 model_weights = model.train(train_img, config)
 
 config['model_weights'] = model_weights
-query_img, database_img = dataset.import_validation(config['img_te'], config['img_db'])
+query_img, database_img = dataset.import_validation(data_root, config['img_te'], config['img_db'])
 maps = model.validation(database_img, query_img, config)
 for key in maps:
     print(("{}: {}".format(key, maps[key])))

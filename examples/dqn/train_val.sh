@@ -16,4 +16,4 @@ filename="lr_${lr}_cqlambda_${q_lambda}_subspace_num_${subspace_num}_T_${T}_K_${
 model_file="models/${filename}.npy"
 export TF_CPP_MIN_LOG_LEVEL=3
 #                                                          lr  output  iter    q_lamb      n_sub   dataset     gpu    log_dir
-CUDA_VISIBLE_DEVICES=$gpu python train_val_script.py      $lr 300     5000    $q_lambda   4       $dataset    0 $log_dir
+CUDA_VISIBLE_DEVICES=$gpu python train_val_script.py      $lr 300     5000    $q_lambda   4       $dataset    0 $log_dir /dir/to/dataset/root/

@@ -14,4 +14,4 @@ fi
 
 export TF_CPP_MIN_LOG_LEVEL=3
 #                                                         lr  output  iter    q_lamb    alpha     dataset     gpu    log_dir
-CUDA_VISIBLE_DEVICES=$gpu python train_val_script.py      $lr 64     2000    $q_lambda  $alpha   $dataset    0   $log_dir 
+CUDA_VISIBLE_DEVICES=$gpu python train_val_script.py      $lr 64     2000    $q_lambda  $alpha   $dataset    0   $log_dir  /dir/to/dataset/root/
