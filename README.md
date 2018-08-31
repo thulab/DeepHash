@@ -34,7 +34,20 @@ export PYTHONPATH=/path/to/project/DeepHash/DeepHash:$PYTHONPATH
 ## Data Preparation
 In `data/cifar10/train.txt`, we give an example to show how to prepare image training data. In `data/cifar10/test.txt` and `data/cifar10/database.txt`, the list of testing and database images could be processed during predicting procedure. If you want to add other datasets as the input, you need to prepare `train.txt`, `test.txt` and `database.txt` as CIFAR-10 dataset.
 
-We also recommend you to follow https://github.com/thuml/HashNet/tree/master/pytorch#datasets to prepare NUSWIDE_81 and COCO images.
+What's more, We have put the whole cifar10 dataset including the images and data list in the [release page](https://github.com/thulab/DeepHash/releases/download/v0.1/cifar10.zip). You can directly download it and unzip to data/cifar10 folder.
+
+Make sure the tree of `/path/to/project/data/cifar10` looks like this:
+
+```
+.
+|-- database.txt
+|-- test
+|-- test.txt
+|-- train
+`-- train.txt
+```
+
+If you need run on NUSWIDE_81 and COCO, we recommend you to follow https://github.com/thuml/HashNet/tree/master/pytorch#datasets to prepare NUSWIDE_81 and COCO images.
 
 ## Get Started
 
