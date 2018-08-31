@@ -65,12 +65,14 @@ Make sure the tree of `/path/to/project/DeepHash/architecture` looks like this:
 
 ### Training and Testing
 
-The example of `$method` (DCH, DVSQ, DQN, DHN and DTQ) can be run like:
+The example of `$method` (DCH and DTQ) can be run like:
 
 ```shell
 cd example/$method/
 python train_val_script.py --gpus "0,1" --data-dir $PWD/../../data --"other parameters descirbe in train_val_script.py"
 ```
+
+For DVSQ, DQN and DHN, please refer to the `train_val.sh` and `train_val_script.py` in the examples folder.
 
 ## Citations
 If you find *DeepHash* is useful for your research, please consider citing the following papers:
