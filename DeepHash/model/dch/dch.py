@@ -29,8 +29,7 @@ class DCH(object):
             self.stage = tf.placeholder_with_default(tf.constant(0), [])
         for k, v in vars(config).items():
             setattr(self, k, v)
-        self.file_name = 'loss_{}_lr_{}_cqlambda_{}_alpha_{}_bias_{}_gamma_{}_dataset_{}'.format(
-                self.loss_type,
+        self.file_name = 'lr_{}_cqlambda_{}_alpha_{}_bias_{}_gamma_{}_dataset_{}'.format(
                 self.lr,
                 self.q_lambda,
                 self.alpha,
@@ -83,61 +82,55 @@ class DCH(object):
         np.save(model_file, np.array(model))
         return
 
+    def cauchy_cross_entropy(self, u, label_u, v=None, label_v=None, gamma=1, normed=True):
 
-    def cross_entropy(self, u, label_u, alpha=0.5, normed=False, pruned=True, bias=0.0):
+        if v is None:
+            v = u
+            label_v = label_u
 
-        label_ip = tf.cast(tf.matmul(label_u, tf.transpose(label_u)), tf.float32)
+        label_ip = tf.cast(
+            tf.matmul(label_u, tf.transpose(label_v)), tf.float32)
         s = tf.clip_by_value(label_ip, 0.0, 1.0)
 
-        # compute balance param
-        # s_t \in {-1, 1}
+        if normed:
+            ip_1 = tf.matmul(u, tf.transpose(v))
+
+            def reduce_shaper(t):
+                return tf.reshape(tf.reduce_sum(t, 1), [tf.shape(t)[0], 1])
+            mod_1 = tf.sqrt(tf.matmul(reduce_shaper(tf.square(u)), reduce_shaper(
+                tf.square(v)) + tf.constant(0.000001), transpose_b=True))
+            dist = tf.constant(np.float32(self.output_dim)) / 2.0 * \
+                (1.0 - tf.div(ip_1, mod_1) + tf.constant(0.000001))
+        else:
+            r_u = tf.reshape(tf.reduce_sum(u * u, 1), [-1, 1])
+            r_v = tf.reshape(tf.reduce_sum(v * v, 1), [-1, 1])
+
+            dist = r_u - 2 * tf.matmul(u, tf.transpose(v)) + \
+                tf.transpose(r_v) + tf.constant(0.001)
+
+        cauchy = gamma / (dist + gamma)
+
         s_t = tf.multiply(tf.add(s, tf.constant(-0.5)), tf.constant(2.0))
         sum_1 = tf.reduce_sum(s)
         sum_all = tf.reduce_sum(tf.abs(s_t))
-        balance_param = tf.add(tf.abs(tf.add(s, tf.constant(-1.0))), tf.multiply(tf.div(sum_all, sum_1), s))
+        balance_param = tf.add(
+            tf.abs(tf.add(s, tf.constant(-1.0))), tf.multiply(tf.div(sum_all, sum_1), s))
 
-        if normed and pruned:
-            # compute cos(u_i, u_j)
-            ip_1 = tf.matmul(u, tf.transpose(u))
-            def reduce_shaper(t):
-                return tf.reshape(tf.reduce_sum(t, 1), [tf.shape(t)[0], 1])
-            mod_1 = tf.sqrt(tf.matmul(reduce_shaper(tf.square(u)), reduce_shaper(tf.square(u)), transpose_b=True))
-            cos = tf.constant(np.float32(self.output_dim)) / 2.0 * (1.0 - tf.div(ip_1, mod_1))
+        mask = tf.equal(tf.eye(tf.shape(u)[0]), tf.constant(0.0))
 
-            # ip = gamma / (gamma^2 + Dim / 2(1 - cos(u_i, u_j))))
-            ip = tf.constant(self.gamma) / (cos + tf.constant(self.gamma)*tf.constant(self.gamma))
-        elif normed:
-            #ip = tf.clip_by_value(tf.matmul(u, tf.transpose(u)), -1.5e1, 1.5e1)
-            ip_1 = tf.matmul(u, tf.transpose(u))
-            def reduce_shaper(t):
-                return tf.reshape(tf.reduce_sum(t, 1), [tf.shape(t)[0], 1])
-            mod_1 = tf.sqrt(tf.matmul(reduce_shaper(tf.square(u)), reduce_shaper(tf.square(u)), transpose_b=True))
-            ip = tf.div(ip_1, mod_1)
-        elif pruned:
-            # ip = b / (1 + ||u_i - u_j||^2)
-            # |u_i-u_j|^2 = r - 2 u u' + r'
-            r = tf.reduce_sum(u*u, 1)
-            # turn r into column vector
-            r = tf.reshape(r, [-1, 1])
-            ip = r - 2*tf.matmul(u, tf.transpose(u)) + tf.transpose(r)
+        cauchy_mask = tf.boolean_mask(cauchy, mask)
+        s_mask = tf.boolean_mask(s, mask)
+        balance_p_mask = tf.boolean_mask(balance_param, mask)
 
-            ip = self.gamma / (ip + self.gamma ** 2)
-        else:
-            ip = tf.clip_by_value(tf.matmul(u, tf.transpose(u)), -1.5e1, 1.5e1)
-        ones = tf.ones([tf.shape(u)[0], tf.shape(u)[0]])
-        ip_new = alpha * ip + bias
-        return tf.reduce_mean(tf.multiply(tf.log(ones + tf.exp(ip_new)) - s * (ip_new), balance_param))
+        all_loss = - s_mask * \
+            tf.log(cauchy_mask) - (tf.constant(1.0) - s_mask) * \
+            tf.log(tf.constant(1.0) - cauchy_mask)
+
+        return tf.reduce_mean(tf.multiply(all_loss, balance_p_mask))
 
     def apply_loss_function(self, global_step):
         ### loss function
-        if self.loss_type == 'cross_entropy':
-            self.cos_loss = self.cross_entropy(self.img_last_layer, self.img_label, self.alpha, False, False, self.bias)
-        elif self.loss_type == 'normed_cross_entropy':
-            self.cos_loss = self.cross_entropy(self.img_last_layer, self.img_label, self.alpha, True, False, self.bias)
-        elif self.loss_type == 'pruned_cross_entropy':
-            self.cos_loss = self.cross_entropy(self.img_last_layer, self.img_label, self.alpha, False, True, self.bias)
-        elif self.loss_type == 'pruned_normed_cross_entropy':
-            self.cos_loss = self.cross_entropy(self.img_last_layer, self.img_label, self.alpha, True, True, self.bias)
+        self.cos_loss = self.cauchy_cross_entropy(self.img_last_layer, self.img_label, gamma=self.gamma, normed=False)
 
         self.q_loss_img = tf.reduce_mean(tf.square(tf.subtract(tf.abs(self.img_last_layer), tf.constant(1.0))))
         self.q_loss = self.q_lambda * self.q_loss_img
