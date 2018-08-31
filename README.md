@@ -10,6 +10,7 @@ The implemented models include:
 * DCH: [Deep Cauchy Hashing for Hamming Space Retrieval](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-cauchy-hashing-cvpr18.pdf), Yue Cao, Mingsheng Long, Bin Liu, Jianmin Wang, IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2018
 * DTQ: [Deep Triplet Quantization](ise.thss.tsinghua.edu.cn/~mlong/doc/deep-triplet-quantization-acmmm18.pdf), Bin Liu, Yue Cao, Mingsheng Long, Jianmin Wang, Jingdong Wang, ACM Multimedia (ACMMM), 2018
 
+Note: DTQ and DCH are updated while DQN, DHN, DVSQ maybe outdated, feel free to touch us if you have any questions.
 
 ## Requirements
 
@@ -33,7 +34,7 @@ export PYTHONPATH=/path/to/project/DeepHash/DeepHash:$PYTHONPATH
 ## Data Preparation
 In `data/cifar10/train.txt`, we give an example to show how to prepare image training data. In `data/cifar10/test.txt` and `data/cifar10/database.txt`, the list of testing and database images could be processed during predicting procedure. If you want to add other datasets as the input, you need to prepare `train.txt`, `test.txt` and `database.txt` as CIFAR-10 dataset.
 
-We also recommend you to follow https://github.com/thuml/HashNet/tree/master/pytorch#datasets to prepare NUSWIDE_81 and COCO datasets.
+We also recommend you to follow https://github.com/thuml/HashNet/tree/master/pytorch#datasets to prepare NUSWIDE_81 and COCO images.
 
 ## Get Started
 
@@ -55,7 +56,7 @@ The example of `$method` (DCH, DVSQ, DQN, DHN and DTQ) can be run like:
 
 ```shell
 cd example/$method/
-python train_val_script.py --gpus "0,1" --"other parameters descirbe in train_val_script.py"
+python train_val_script.py --gpus "0,1" --data-dir $PWD/../../data --"other parameters descirbe in train_val_script.py"
 ```
 
 ## Citations
