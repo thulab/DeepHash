@@ -40,6 +40,7 @@ parser.add_argument('--model-weights', type=str,
                     default='../../DeepHash/architecture/pretrained_model/reference_pretrain.npy')
 parser.add_argument('--finetune-all', default=True, type=bool)
 parser.add_argument('--save-dir', default="./models/", type=str)
+parser.add_argument('--data-dir', default="~/data/", type=str)
 parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true')
 
 args = parser.parse_args()
@@ -50,16 +51,18 @@ label_dims = {'cifar10': 10, 'cub': 200, 'nuswide_81': 81, 'coco': 80}
 Rs = {'cifar10': 54000, 'nuswide_81': 5000, 'coco': 5000}
 args.R = Rs[args.dataset]
 args.label_dim = label_dims[args.dataset]
-args.img_tr = "/home/caoyue/data/{}/train.txt".format(args.dataset)
-args.img_te = "/home/caoyue/data/{}/test.txt".format(args.dataset)
-args.img_db = "/home/caoyue/data/{}/database.txt".format(args.dataset)
+
+args.img_tr = os.path.join(args.data_dir, args.dataset, "train.txt")
+args.img_te = os.path.join(args.data_dir, args.dataset, "test.txt")
+args.img_db = os.path.join(args.data_dir, args.dataset, "database.txt")
 
 pprint(vars(args))
 
-query_img, database_img = dataset.import_validation(args.img_te, args.img_db)
+data_root = os.path.join(args.data_dir, args.dataset)
+query_img, database_img = dataset.import_validation(data_root, args.img_te, args.img_db)
 
 if not args.evaluate:
-    train_img = dataset.import_train(args.img_tr)
+    train_img = dataset.import_train(data_root, args.img_tr)
     model_weights = model.train(train_img, database_img, query_img, args)
     args.model_weights = model_weights
 

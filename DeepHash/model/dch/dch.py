@@ -150,14 +150,12 @@ class DCH(object):
         fcgrad, _ = grads_and_vars[-2]
         fbgrad, _ = grads_and_vars[-1]
 
-        # for debug
         self.grads_and_vars = grads_and_vars
         tf.summary.scalar('loss', self.loss)
         tf.summary.scalar('cos_loss', self.cos_loss)
         tf.summary.scalar('q_loss', self.q_loss)
         tf.summary.scalar('lr', lr)
         self.merged = tf.summary.merge_all()
-
 
         if self.finetune_all:
             return opt.apply_gradients([(grads_and_vars[0][0], self.train_layers[0]),

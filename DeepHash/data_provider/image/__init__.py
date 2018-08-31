@@ -15,6 +15,7 @@
 
 """Routine for decoding the NUS-WIDE binary file format."""
 
+import os
 import cv2
 import numpy as np
 
@@ -27,48 +28,50 @@ import numpy as np
 
 
 class Dataset(object):
-    def __init__(self, modal, path, train=True):
+    def __init__(self, modal, data_root, path, train=True):
         self.lines = open(path, 'r').readlines()
+        self.data_root = data_root
         self.n_samples = len(self.lines)
         self.train = train
         assert modal == 'img'
-        if modal == 'img':
-            self.modal = 'img'
-            self._img = [0] * self.n_samples
-            self._label = [0] * self.n_samples
-            self._load = [0] * self.n_samples
-            self._load_num = 0
-            self._status = 0
-            self.data = self.img_data
-            self.all_data = self.img_all_data
+        self.modal = 'img'
+        self._img = [0] * self.n_samples
+        self._label = [0] * self.n_samples
+        self._load = [0] * self.n_samples
+        self._load_num = 0
+        self._status = 0
+        self.data = self.img_data
+        self.all_data = self.img_all_data
 
-    def img_data(self, index):
+    def get_img(self, i):
+        path = os.path.join(self.data_root, self.lines[i].strip().split()[0])
+        return cv2.resize(cv2.imread(path), (256, 256))
+
+    def get_label(self, i):
+        return [int(j) for j in self.lines[i].strip().split()[1:]]
+
+    def img_data(self, indexes):
         if self._status:
-            return (self._img[index, :], self._label[index, :])
+            return (self._img[indexes, :], self._label[indexes, :])
         else:
             ret_img = []
             ret_label = []
-            for i in index:
+            for i in indexes:
                 try:
                     if self.train:
                         if not self._load[i]:
-                            self._img[i] = cv2.resize(cv2.imread(
-                                self.lines[i].strip().split()[0]), (256, 256))
-                            self._label[i] = [
-                                int(j) for j in self.lines[i].strip().split()[1:]]
+                            self._img[i] = self.get_img(i)
+                            self._label[i] = self.get_label(i)
                             self._load[i] = 1
                             self._load_num += 1
                         ret_img.append(self._img[i])
                         ret_label.append(self._label[i])
                     else:
-                        label = [int(j)
-                                 for j in self.lines[i].strip().split()[1:]]
-                        self._label[i] = label
-                        ret_img.append(cv2.resize(cv2.imread(
-                            self.lines[i].strip().split()[0]), (256, 256)))
-                        ret_label.append(label)
-                except:
-                    print('cannot open', self.lines[i])
+                        self._label[i] = self.get_label(i)
+                        ret_img.append(self.get_img(i))
+                        ret_label.append(self._label[i])
+                except Exception as e:
+                    print('cannot open {}, exception: {}'.format(self.lines[i].strip(), e))
 
             if self._load_num == self.n_samples:
                 self._status = 1
@@ -88,16 +91,16 @@ class Dataset(object):
         return np.asarray(self._label)
 
 
-def import_train(img_tr):
+def import_train(data_root, img_tr):
     '''
     return (img_tr, txt_tr)
     '''
-    return (Dataset('img', img_tr, train=True))
+    return (Dataset('img', data_root, img_tr, train=True))
 
 
-def import_validation(img_te, img_db):
+def import_validation(data_root, img_te, img_db):
     '''
     return (img_te, txt_te, img_db, txt_db)
     '''
-    return (Dataset('img', img_te, train=False),
-            Dataset('img', img_db, train=False))
+    return (Dataset('img', data_root, img_te, train=False),
+            Dataset('img', data_root, img_db, train=False))
