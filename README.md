@@ -49,6 +49,8 @@ Make sure the tree of `/path/to/project/data/cifar10` looks like this:
 
 If you need run on NUSWIDE_81 and COCO, we recommend you to follow https://github.com/thuml/HashNet/tree/master/pytorch#datasets to prepare NUSWIDE_81 and COCO images.
 
+For *DVSQ* model, you also need the *word vector* of the semantic labels. Here we use word2vec model pretrained on GoogleNews Dataset (e.g. https://github.com/mmihaltz/word2vec-GoogleNews-vectors), to extract the word embeddings for the labels of images, e.g. dog, cat and so on.
+
 ## Get Started
 
 ### Pre-trained model
