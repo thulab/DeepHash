@@ -36,13 +36,13 @@ config = {
     'output_dim': output_dim,
 
     'R': Rs[_dataset],
-    'model_weights': '../../core/architecture/single_model/pretrained_model/reference_pretrain.npy',
+    'model_weights': '../../DeepHash/architecture/pretrained_model/reference_pretrain.npy',
 
     'img_model': 'alexnet',
     'loss_type': 'cos_softmargin_multi_label',
 
     'margin_param': 0.7,
-    'wordvec_dict': "/home/caoyue/data/{dataset}/{dataset}_wordvec.txt".format(dataset=_dataset),
+    'wordvec_dict': "{}/{}_wordvec.txt".format(data_root, _dataset),
 
     # if only finetune last layer
     'finetune_all': True,
@@ -56,9 +56,9 @@ config = {
     'n_subcenter': 256,
 
     'label_dim': label_dims[_dataset],
-    'img_tr': "/home/caoyue/data/{}/train.txt".format(_dataset),
-    'img_te': "/home/caoyue/data/{}/test.txt".format(_dataset),
-    'img_db': "/home/caoyue/data/{}/database.txt".format(_dataset),
+    'img_tr': "{}/train.txt".format(data_root),
+    'img_te': "{}/test.txt".format(data_root),
+    'img_db': "{}/database.txt".format(data_root),
     'save_dir': "./models/",
     'log_dir': log_dir,
     'dataset': _dataset
