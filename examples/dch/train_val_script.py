@@ -27,7 +27,7 @@ parser.add_argument('--log-dir', default='tflog', type=str)
 parser.add_argument('-b', '--batch-size', default=128, type=int)
 parser.add_argument('-vb', '--val-batch-size', default=16, type=int)
 parser.add_argument('--decay-step', default=10000, type=int)
-parser.add_argument('--decay-factor', default=0.1, type=int)
+parser.add_argument('--decay-factor', default=0.1, type=float)
 
 tanh_parser = parser.add_mutually_exclusive_group(required=False)
 tanh_parser.add_argument('--with-tanh', dest='with_tanh', action='store_true')
