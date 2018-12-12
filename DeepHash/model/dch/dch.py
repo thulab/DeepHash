@@ -137,7 +137,7 @@ class DCH(object):
         self.loss = self.cos_loss + self.q_loss
 
         ### Last layer has a 10 times learning rate
-        lr = tf.train.exponential_decay(self.lr, global_step, self.decay_step, self.lr, staircase=True)
+        lr = tf.train.exponential_decay(self.lr, global_step, self.decay_step, self.decay_factor, staircase=True)
         opt = tf.train.MomentumOptimizer(learning_rate=lr, momentum=0.9)
         grads_and_vars = opt.compute_gradients(self.loss, self.train_layers+self.train_last_layer)
         fcgrad, _ = grads_and_vars[-2]
