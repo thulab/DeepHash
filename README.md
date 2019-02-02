@@ -55,7 +55,7 @@ For *DVSQ* model, you also need the *word vector* of the semantic labels. Here w
 
 ### Pre-trained model
 
-You should manually download the model file of the Imagenet pre-tained AlexNet from [here](https://github.com/thuml/DeepHash/releases/download/v0/reference_pretrain.npy.zip) or from release page and unzip it to `/path/to/project/DeepHash/architecture/pretrained_model`.
+You should manually download the model file of the Imagenet pre-tained AlexNet from [here](https://github.com/thulab/DeepHash/releases/download/v0.1/reference_pretrain.npy.zip) or from release page and unzip it to `/path/to/project/DeepHash/architecture/pretrained_model`.
 
 Make sure the tree of `/path/to/project/DeepHash/architecture` looks like this:
 
