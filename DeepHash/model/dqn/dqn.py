@@ -71,7 +71,7 @@ class DQN(object):
             self.img_label = tf.placeholder(
                 tf.float32, [None, self.n_class])
 
-            self.model_weights = config['model_weights'] 
+            self.model_weights = config['model_weights']
             self.img_last_layer, self.deep_param_img, self.train_layers, self.train_last_layer = self.load_model()
 
             self.C = tf.Variable(tf.random_uniform([self.subspace_num * self.subcenter_num, self.output_dim],
@@ -306,11 +306,10 @@ class DQN(object):
             images, labels, codes = img_dataset.next_batch(self.batch_size)
             start_time = time.time()
 
-            if epoch > 0:
-                assign_lambda = self.q_lambda.assign(self.cq_lambda)
-            else:
-                assign_lambda = self.q_lambda.assign(0.0)
-            self.sess.run([assign_lambda])
+            # for epoch 0, q_lambda = 0, for epoch > 0, q_lambda = self.cq_lambda
+            if epoch <= 1:
+                assign_lambda = self.q_lambda.assign(epoch * self.cq_lambda)
+                self.sess.run([assign_lambda])
 
             _, loss, output, summary = self.sess.run([self.train_op, self.loss, self.img_last_layer, self.merged],
                                                      feed_dict={self.img: images,

@@ -190,9 +190,6 @@ class DHN(object):
             images, labels = img_dataset.next_batch(self.batch_size)
             start_time = time.time()
 
-            assign_lambda = self.q_lambda.assign(self.cq_lambda)
-            self.sess.run([assign_lambda])
-
             _, loss, cos_loss, output, summary = self.sess.run(
                 [self.train_op, self.loss, self.cos_loss, self.img_last_layer, self.merged],
                 feed_dict={self.img: images,
