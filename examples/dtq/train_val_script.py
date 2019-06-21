@@ -11,7 +11,8 @@ warnings.filterwarnings("ignore", category = DeprecationWarning)
 warnings.filterwarnings("ignore", category = FutureWarning)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-parser = argparse.ArgumentParser(description='Triplet Hashing')
+parser = argparse.ArgumentParser(description='Triplet Hashing',
+                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--lr', '--learning-rate', default=0.00003, type=float)
 parser.add_argument('--triplet-margin', default=30, type=float)
 parser.add_argument('--select-strategy', default='margin', choices=['hard', 'all', 'margin'])

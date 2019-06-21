@@ -168,7 +168,7 @@ class DTQ(object):
 
     def quantization_loss(self, z, h):
         with tf.name_scope('quantization_loss'):
-            q_loss = tf.reduce_mean(tf.reduce_sum(z - tf.matmul(h, self.C), -1))
+            q_loss = tf.reduce_mean(tf.reduce_sum(tf.square(z - tf.matmul(h, self.C)), -1))
         return q_loss
 
     def apply_loss_function(self, global_step):
