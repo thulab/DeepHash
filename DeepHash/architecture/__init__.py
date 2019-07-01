@@ -47,7 +47,7 @@ def img_alexnet_layers(img, batch_size, output_dim, stage, model_weights, with_t
         distorted = tf.cond(stage > 0, val_fn, train_fn)
 
         # Zero-mean input
-        mean = tf.constant([103.939, 116.779, 123.68], dtype=tf.float32, shape=[
+        mean = tf.constant([123.68, 116.779, 103.939], dtype=tf.float32, shape=[
                            1, 1, 1, 3], name='img-mean')
         distorted = distorted - mean
 
