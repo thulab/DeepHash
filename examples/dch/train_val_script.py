@@ -1,23 +1,19 @@
 import os
 import argparse
 import warnings
-import numpy as np
-import scipy.io as sio
 import model.dch as model
 import data_provider.image as dataset
 
 from pprint import pprint
 
-warnings.filterwarnings("ignore", category = DeprecationWarning)
-warnings.filterwarnings("ignore", category = FutureWarning)
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 parser = argparse.ArgumentParser(description='Triplet Hashing')
 parser.add_argument('--lr', '--learning-rate', default=0.005, type=float)
 parser.add_argument('--output-dim', default=64, type=int)   # 256, 128
-parser.add_argument('--alpha', default=0.5, type=float)
-parser.add_argument('--bias', default=0.0, type=float)
 parser.add_argument('--gamma', default=20, type=float)
 parser.add_argument('--iter-num', default=2000, type=int)
 parser.add_argument('--q-lambda', default=0, type=float)

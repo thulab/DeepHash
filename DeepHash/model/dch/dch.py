@@ -20,8 +20,8 @@ from evaluation import MAPs
 
 class DCH(object):
     def __init__(self, config):
-        ### Initialize setting
-        print ("initializing")
+        # Initialize setting
+        print("initializing")
         np.set_printoptions(precision=4)
 
         with tf.name_scope('stage'):
@@ -29,23 +29,21 @@ class DCH(object):
             self.stage = tf.placeholder_with_default(tf.constant(0), [])
         for k, v in vars(config).items():
             setattr(self, k, v)
-        self.file_name = 'lr_{}_cqlambda_{}_alpha_{}_bias_{}_gamma_{}_dataset_{}'.format(
-                self.lr,
-                self.q_lambda,
-                self.alpha,
-                self.bias,
-                self.gamma,
-                self.dataset)
+        self.file_name = 'lr_{}_cqlambda_{}_gamma_{}_dataset_{}'.format(
+            self.lr,
+            self.q_lambda,
+            self.gamma,
+            self.dataset)
         self.save_file = os.path.join(self.save_dir, self.file_name + '.npy')
 
-        ### Setup session
-        print ("launching session")
+        # Setup session
+        print("launching session")
         configProto = tf.ConfigProto()
         configProto.gpu_options.allow_growth = True
         configProto.allow_soft_placement = True
         self.sess = tf.Session(config=configProto)
 
-        ### Create variables and placeholders
+        # Create variables and placeholders
         self.img = tf.placeholder(tf.float32, [None, 256, 256, 3])
         self.img_label = tf.placeholder(tf.float32, [None, self.label_dim])
         self.img_last_layer, self.deep_param_img, self.train_layers, self.train_last_layer = self.load_model()
@@ -58,13 +56,13 @@ class DCH(object):
     def load_model(self):
         if self.img_model == 'alexnet':
             img_output = img_alexnet_layers(
-                    self.img,
-                    self.batch_size,
-                    self.output_dim,
-                    self.stage,
-                    self.model_weights,
-                    self.with_tanh,
-                    self.val_batch_size)
+                self.img,
+                self.batch_size,
+                self.output_dim,
+                self.stage,
+                self.model_weights,
+                self.with_tanh,
+                self.val_batch_size)
         else:
             raise Exception('cannot use such CNN model as ' + self.img_model)
         return img_output
@@ -129,14 +127,14 @@ class DCH(object):
         return tf.reduce_mean(tf.multiply(all_loss, balance_p_mask))
 
     def apply_loss_function(self, global_step):
-        ### loss function
+        # loss function
         self.cos_loss = self.cauchy_cross_entropy(self.img_last_layer, self.img_label, gamma=self.gamma, normed=False)
 
         self.q_loss_img = tf.reduce_mean(tf.square(tf.subtract(tf.abs(self.img_last_layer), tf.constant(1.0))))
         self.q_loss = self.q_lambda * self.q_loss_img
         self.loss = self.cos_loss + self.q_loss
 
-        ### Last layer has a 10 times learning rate
+        # Last layer has a 10 times learning rate
         lr = tf.train.exponential_decay(self.lr, global_step, self.decay_step, self.decay_factor, staircase=True)
         opt = tf.train.MomentumOptimizer(learning_rate=lr, momentum=0.9)
         grads_and_vars = opt.compute_gradients(self.loss, self.train_layers+self.train_last_layer)
@@ -174,7 +172,7 @@ class DCH(object):
     def train(self, img_dataset):
         print("%s #train# start training" % datetime.now())
 
-        ### tensorboard
+        # tensorboard
         tflog_path = os.path.join(self.log_dir, self.file_name)
         if os.path.exists(tflog_path):
             shutil.rmtree(tflog_path)
@@ -185,8 +183,8 @@ class DCH(object):
             start_time = time.time()
 
             _, loss, cos_loss, output, summary = self.sess.run([self.train_op, self.loss, self.cos_loss, self.img_last_layer, self.merged],
-                                    feed_dict={self.img: images,
-                                               self.img_label: labels})
+                                                               feed_dict={self.img: images,
+                                                                          self.img_label: labels})
 
             train_writer.add_summary(summary, train_iter)
 
@@ -195,11 +193,11 @@ class DCH(object):
 
             if train_iter % 100 == 0:
                 print("%s #train# step %4d, loss = %.4f, cross_entropy loss = %.4f, %.1f sec/batch"
-                        %(datetime.now(), train_iter+1, loss, cos_loss, duration))
+                      % (datetime.now(), train_iter+1, loss, cos_loss, duration))
 
         print("%s #traing# finish training" % datetime.now())
         self.save_model()
-        print ("model saved")
+        print("model saved")
 
         self.sess.close()
 
@@ -211,15 +209,16 @@ class DCH(object):
         for i in range(query_batch):
             images, labels = img_query.next_batch(self.val_batch_size)
             output, loss = self.sess.run([self.img_last_layer, self.cos_loss],
-                                   feed_dict={self.img: images,
-                                              self.img_label: labels,
-                                              self.stage: 1})
+                                         feed_dict={self.img: images,
+                                                    self.img_label: labels,
+                                                    self.stage: 1})
             img_query.feed_batch_output(self.val_batch_size, output)
-            print('Cosine Loss: %s'%loss)
+            print('Cosine Loss: %s' % loss)
 
         database_batch = int(ceil(img_database.n_samples / float(self.val_batch_size)))
         img_database.finish_epoch()
-        print("%s #validation# totally %d database in %d batches" % (datetime.now(), img_database.n_samples, database_batch))
+        print("%s #validation# totally %d database in %d batches" %
+              (datetime.now(), img_database.n_samples, database_batch))
         for i in range(database_batch):
             images, labels = img_database.next_batch(self.val_batch_size)
 
@@ -229,7 +228,7 @@ class DCH(object):
                                                     self.stage: 1})
             img_database.feed_batch_output(self.val_batch_size, output)
             if i % 100 == 0:
-                print('Cosine Loss[%d/%d]: %s'%(i, database_batch, loss))
+                print('Cosine Loss[%d/%d]: %s' % (i, database_batch, loss))
 
         mAPs = MAPs(R)
 
@@ -241,7 +240,7 @@ class DCH(object):
             plot.plot('rec', rec[i])
             plot.plot('mAP', mmap[i])
             plot.tick()
-            print('Results ham dist [%d], prec:%s, rec:%s, mAP:%s'%(i, prec[i], rec[i], mmap[i]))
+            print('Results ham dist [%d], prec:%s, rec:%s, mAP:%s' % (i, prec[i], rec[i], mmap[i]))
 
         result_save_dir = os.path.join(self.save_dir, self.file_name)
         if os.path.exists(result_save_dir) is False:
@@ -256,4 +255,3 @@ class DCH(object):
             'i2i_recall_radius_2': rec,
             'i2i_map_radius_2': mmap,
         }
-
